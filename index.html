@@ -6,6 +6,7 @@
 <title>ITR Document Submission — Client Guide</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: auto; }
 
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
@@ -14,8 +15,8 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  min-height: 100vh;
-  padding: 20px 16px 24px;
+  min-height: auto;
+  padding: 14px 12px 16px;
 }
 
 /* ── OUTER WRAPPER (single-column on mobile) ── */
@@ -50,29 +51,30 @@ body {
 @media (min-width: 860px) {
   body {
     justify-content: center;
-    padding: 20px;
+    padding: 14px 20px;
   }
   .demo-wrap {
     flex-direction: row;
-    max-width: 920px;
+    max-width: 980px;
     align-items: flex-start;
-    gap: 28px;
+    gap: 24px;
     justify-content: center;
   }
   .demo-phone {
-    flex: 0 0 440px;
-    width: 440px;
+    flex: 0 0 420px;
+    width: 420px;
   }
   .demo-controls-panel {
     flex: 1;
-    min-width: 220px;
-    gap: 14px;
+    min-width: 200px;
+    max-width: 340px;
+    gap: 12px;
     padding-top: 4px;
   }
 
-  /* Fixed-height screen viewport — content scrolls inside the frame */
+  /* Taller screen viewport on desktop — less internal scroll */
   .screen-wrap {
-    height: 340px !important;
+    height: 460px !important;
     min-height: unset !important;
     overflow-y: auto;
     overflow-x: hidden;
@@ -208,13 +210,22 @@ body {
 /* ── SCREEN CONTAINER ── */
 .screen-wrap {
   position: relative;
-  min-height: 480px;
+  min-height: 420px;
   overflow: hidden;
+}
+/* Mobile: limit height with internal scroll so page doesn't get too tall */
+@media (max-width: 859px) {
+  .screen-wrap {
+    max-height: 520px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #d1d5db transparent;
+  }
 }
 .screen {
   position: absolute;
   top: 0; left: 0; right: 0;
-  padding: 28px 28px 24px;
+  padding: 20px 20px 18px;
   opacity: 0;
   transform: translateX(50px);
   transition: opacity 0.45s ease, transform 0.45s ease;
