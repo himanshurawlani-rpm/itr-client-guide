@@ -21,12 +21,15 @@ html,body{background:#e8edf5;font-family:'Segoe UI',Arial,sans-serif;}
 /* ═══════════════════════════════════════════
    DESKTOP  — laptop mockup (≥ 700 px)
 ═══════════════════════════════════════════ */
+/* Both hidden by default — JS reveals correct one based on screen.width */
 .desktop-wrap{display:none;}
 .mobile-wrap {display:none;}
 
-@media(min-width:700px){
-  body{display:flex;flex-direction:column;align-items:center;padding:20px 16px 24px;min-height:auto;}
-  .desktop-wrap{display:block;width:100%;max-width:960px;}
+/* ── DESKTOP styles: activated by JS adding class="is-desktop" to body ── */
+.is-desktop body,.is-desktop.body-ready{display:flex;flex-direction:column;align-items:center;padding:20px 16px 24px;min-height:auto;}
+body.is-desktop{display:flex;flex-direction:column;align-items:center;padding:20px 16px 24px;min-height:auto;}
+html.is-desktop body,.is-desktop body{display:flex;flex-direction:column;align-items:center;padding:20px 16px 24px;min-height:auto;}
+html.is-desktop .desktop-wrap,body.is-desktop .desktop-wrap{display:block;width:100%;max-width:960px;}
 
   /* ── laptop shell ── */
   .laptop-shell{
@@ -158,14 +161,12 @@ html,body{background:#e8edf5;font-family:'Segoe UI',Arial,sans-serif;}
     background:#fff;font-size:12px;font-weight:700;color:#374151;cursor:pointer;
   }
   .d-nav button.primary{background:var(--navy);color:#fff;border-color:var(--navy);}
-}
 
 /* ═══════════════════════════════════════════
-   MOBILE  — phone mockup (< 700 px)
+   MOBILE styles: activated by JS adding class="is-mobile" to body
 ═══════════════════════════════════════════ */
-@media(max-width:699px){
-  body{display:flex;flex-direction:column;align-items:center;padding:12px 10px 16px;min-height:auto;}
-  .mobile-wrap{display:block;width:100%;max-width:400px;}
+html.is-mobile body,body.is-mobile{display:flex;flex-direction:column;align-items:center;padding:12px 10px 16px;min-height:auto;}
+html.is-mobile .mobile-wrap,body.is-mobile .mobile-wrap{display:block;width:100%;max-width:400px;}
 
   /* phone shell */
   .phone-shell{
@@ -387,6 +388,16 @@ html,body{background:#e8edf5;font-family:'Segoe UI',Arial,sans-serif;}
 .prev-step.done-step .ps-num{background:#16a34a;}
 .prev-label{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px;text-align:center;}
 </style>
+<!-- Apply layout class BEFORE render using screen.width (works inside iframes) -->
+<script>
+  (function(){
+    var cls = window.screen.width >= 700 ? 'is-desktop' : 'is-mobile';
+    document.documentElement.className = cls; // on <html> first
+    document.addEventListener('DOMContentLoaded', function(){
+      document.body.classList.add(cls);
+    });
+  })();
+</script>
 </head>
 <body>
 
@@ -954,10 +965,11 @@ function mRunAnim(n){
   }
 }
 
-// ── INIT: show correct layout based on viewport ──
+// ── INIT: apply layout class + show correct layout ──
 window.addEventListener('load',()=>{
-  dShow(0);
-  mShow(0);
+  const isDesktop = window.screen.width >= 700;
+  document.body.classList.add(isDesktop ? 'is-desktop' : 'is-mobile');
+  if(isDesktop){ dShow(0); } else { mShow(0); }
 });
 </script>
 </body>
