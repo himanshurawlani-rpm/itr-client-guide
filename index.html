@@ -5,1194 +5,959 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ITR Document Submission — Client Guide</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { height: auto; }
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:#e8edf5;font-family:'Segoe UI',Arial,sans-serif;}
 
-body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: #e8edf5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: auto;
-  padding: 14px 12px 16px;
+/* ═══════════════════════════════════════════
+   SHARED COLOURS & TOKENS
+═══════════════════════════════════════════ */
+:root{
+  --navy:#1a3664;
+  --orange:#e8620a;
+  --grey:#6b7280;
+  --border:#e5e7eb;
 }
 
-/* ── OUTER WRAPPER (single-column on mobile) ── */
-.demo-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  width: 100%;
-  max-width: 520px;
-}
+/* ═══════════════════════════════════════════
+   DESKTOP  — laptop mockup (≥ 700 px)
+═══════════════════════════════════════════ */
+.desktop-wrap{display:none;}
+.mobile-wrap {display:none;}
 
-/* ── PHONE WRAPPER (groups browser chrome + app frame) ── */
-.demo-phone { width: 100%; }
+@media(min-width:700px){
+  body{display:flex;flex-direction:column;align-items:center;padding:20px 16px 24px;min-height:auto;}
+  .desktop-wrap{display:block;width:100%;max-width:960px;}
 
-/* ── CONTROLS PANEL (audio + nav; becomes sidebar on desktop) ── */
-.demo-controls-panel {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Sidebar-only elements: hidden on mobile */
-.sidebar-intro   { display: none; }
-.sidebar-features { display: none; }
-
-/* ─────────────────────────────────────────────────────────────────
-   DESKTOP TWO-COLUMN LAYOUT  (≥860px)
-   Left : phone simulation  (440px fixed)
-   Right: narration sidebar (flexible)
-   ───────────────────────────────────────────────────────────────── */
-@media (min-width: 520px) {
-  body {
-    justify-content: center;
-    padding: 14px 16px;
+  /* ── laptop shell ── */
+  .laptop-shell{
+    background:#2d2d2d;
+    border-radius:14px 14px 0 0;
+    padding:10px 14px 0;
+    box-shadow:0 20px 60px rgba(0,0,0,0.25);
   }
-  .demo-wrap {
-    flex-direction: row;
-    max-width: 980px;
-    align-items: flex-start;
-    gap: 20px;
-    justify-content: center;
+  .laptop-camera-bar{
+    display:flex;justify-content:center;align-items:center;
+    height:18px;margin-bottom:8px;
   }
-  .demo-phone {
-    flex: 0 0 360px;
-    width: 360px;
-  }
-  .demo-controls-panel {
-    flex: 1;
-    min-width: 180px;
-    max-width: 300px;
-    gap: 10px;
-    padding-top: 4px;
+  .laptop-camera{width:7px;height:7px;border-radius:50%;background:#555;}
+  .laptop-screen{
+    background:#fff;
+    border-radius:6px 6px 0 0;
+    overflow:hidden;
+    border:1px solid #111;
   }
 
-  /* Desktop: grows with content, scrolls if taller than max */
-  .screen-wrap {
-    height: auto !important;
-    min-height: unset !important;
-    max-height: 540px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: #d1d5db transparent;
+  /* ── browser bar inside laptop ── */
+  .browser-bar{
+    background:#f1f3f4;
+    padding:7px 12px;
+    display:flex;align-items:center;gap:8px;
+    border-bottom:1px solid #e0e0e0;
   }
-  .screen-wrap::-webkit-scrollbar        { width: 5px; }
-  .screen-wrap::-webkit-scrollbar-track  { background: transparent; }
-  .screen-wrap::-webkit-scrollbar-thumb  { background: #d1d5db; border-radius: 3px; }
+  .bdots{display:flex;gap:5px;}
+  .bdots span{width:10px;height:10px;border-radius:50%;}
+  .bd-r{background:#ff5f57;}.bd-y{background:#febc2e;}.bd-g{background:#28c840;}
+  .burl{
+    flex:1;background:#fff;border-radius:5px;
+    padding:4px 10px;font-size:11px;color:#374151;
+    border:1px solid #e5e7eb;display:flex;align-items:center;gap:5px;
+  }
+  .burl .lock{color:#16a34a;font-size:10px;}
 
-  /* Audio panel becomes standalone card on desktop */
-  .audio-panel {
-    border-radius: 12px !important;
-    padding: 10px 14px !important;
+  /* ── RPM app header ── */
+  .app-header{
+    background:var(--navy);padding:11px 20px;
+    display:flex;align-items:center;justify-content:space-between;
   }
-
-  /* Controls lose top margin — gap on parent handles spacing */
-  .controls { margin-top: 0 !important; }
-
-  /* Sidebar intro card */
-  .sidebar-intro {
-    display: block;
-    background: #fff;
-    border-radius: 12px;
-    padding: 18px 20px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
-    order: -1;
+  .hdr-left{display:flex;align-items:center;gap:10px;}
+  .rpm-logo{
+    width:36px;height:36px;background:var(--orange);border-radius:7px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:900;color:#fff;flex-shrink:0;
   }
-  .sidebar-title {
-    font-size: 15px;
-    font-weight: 800;
-    color: #1a3664;
-    margin-bottom: 5px;
-  }
-  .sidebar-sub {
-    font-size: 11.5px;
-    color: #6b7280;
-    line-height: 1.5;
+  .hdr-firm-name{color:#fff;font-size:13px;font-weight:700;}
+  .hdr-firm-sub{color:rgba(255,255,255,.65);font-size:10px;}
+  .fy-badge{
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+    border-radius:20px;padding:4px 12px;font-size:11px;color:#fff;font-weight:600;
   }
 
-  /* Feature bullets card */
-  .sidebar-features {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-    background: #fff;
-    border-radius: 12px;
-    padding: 16px 18px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  /* ── desktop screen area (landscape) ── */
+  .d-screen-wrap{
+    position:relative;height:420px;overflow:hidden;
+    background:#f8f9fb;
   }
-  .feature {
-    font-size: 12.5px;
-    color: #374151;
-    line-height: 1.4;
+  .d-screen{
+    position:absolute;top:0;left:0;right:0;bottom:0;
+    display:flex;gap:0;
+    opacity:0;transform:translateX(40px);
+    transition:opacity .45s ease,transform .45s ease;
+    pointer-events:none;
+    overflow:hidden;
   }
-}
+  .d-screen.active{opacity:1;transform:translateX(0);pointer-events:auto;}
+  .d-screen.exit-left{opacity:0;transform:translateX(-40px);}
 
-/* ── BROWSER CHROME ── */
-.browser-chrome {
-  width: 100%;
-  background: #f1f3f4;
-  border-radius: 12px 12px 0 0;
-  border: 1.5px solid #d1d5db;
-  border-bottom: none;
-  padding: 8px 12px 6px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.browser-dots { display: flex; gap: 5px; }
-.browser-dots span {
-  width: 11px; height: 11px; border-radius: 50%;
-}
-.bd-r { background: #ff5f57; }
-.bd-y { background: #febc2e; }
-.bd-g { background: #28c840; }
-.browser-url {
-  flex: 1;
-  background: #fff;
-  border-radius: 6px;
-  padding: 4px 10px;
-  font-size: 11px;
-  color: #374151;
-  border: 1px solid #e5e7eb;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.browser-url .lock { color: #16a34a; font-size: 10px; }
-
-/* ── APP FRAME ── */
-.app-frame {
-  width: 100%;
-  background: #fff;
-  border: 1.5px solid #d1d5db;
-  border-top: none;
-  border-radius: 0 0 12px 12px;
-  overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.13);
-}
-
-/* ── REAL HEADER (matches carpmassociates.com) ── */
-.app-header {
-  background: #1a3664;
-  padding: 12px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.header-left { display: flex; align-items: center; gap: 12px; }
-.rpm-logo {
-  width: 40px; height: 40px;
-  background: #e8620a;
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 900; color: #fff;
-  letter-spacing: -0.5px;
-  flex-shrink: 0;
-}
-.header-firm { color: #fff; }
-.header-firm .firm-name { font-size: 14px; font-weight: 700; line-height: 1.2; }
-.header-firm .firm-sub { font-size: 10px; color: rgba(255,255,255,0.65); }
-.fy-badge {
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius: 20px;
-  padding: 4px 12px;
-  font-size: 11px;
-  color: #fff;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-/* ── SCREEN CONTAINER ── */
-.screen-wrap {
-  position: relative;
-  min-height: 0;
-  overflow: hidden;
-}
-/* Mobile: grows with content, max-height prevents runaway long screens */
-@media (max-width: 519px) {
-  .screen-wrap {
-    max-height: 520px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #d1d5db transparent;
+  /* Left content pane */
+  .d-left{
+    flex:1;padding:30px 36px;
+    display:flex;flex-direction:column;justify-content:center;
+    border-right:1px solid var(--border);
   }
-}
-.screen {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  padding: 20px 20px 18px;
-  opacity: 0;
-  transform: translateX(50px);
-  transition: opacity 0.45s ease, transform 0.45s ease;
-  pointer-events: none;
-}
-.screen.active {
-  opacity: 1;
-  transform: translateX(0);
-  pointer-events: auto;
-  position: relative;
-}
-.screen.exit-left {
-  opacity: 0;
-  transform: translateX(-50px);
+  /* Right preview pane */
+  .d-right{
+    width:340px;flex-shrink:0;
+    background:#f0f4fb;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:24px 20px;
+    gap:10px;
+  }
+
+  /* progress bar inside screen */
+  .d-progress{
+    padding:8px 20px 10px;background:#fff;
+    border-top:1px solid var(--border);
+    display:flex;align-items:center;gap:10px;
+  }
+  .d-progress-track{flex:1;height:3px;background:#e5e7eb;border-radius:3px;overflow:hidden;}
+  .d-progress-fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--orange));border-radius:3px;transition:width .5s;}
+  .d-progress-label{font-size:10px;color:#9ca3af;font-weight:600;white-space:nowrap;}
+
+  /* laptop base */
+  .laptop-base{
+    background:linear-gradient(180deg,#b0b0b0,#d0d0d0);
+    height:18px;border-radius:0 0 10px 10px;
+    display:flex;justify-content:center;align-items:flex-end;padding-bottom:3px;
+  }
+  .laptop-notch{width:80px;height:6px;background:#888;border-radius:4px 4px 0 0;}
+  .laptop-foot{
+    background:#c8c8c8;height:6px;border-radius:0 0 8px 8px;
+    width:70%;margin:0 auto;
+  }
+
+  /* ── controls row below laptop ── */
+  .d-controls{
+    margin-top:14px;display:flex;align-items:stretch;gap:12px;
+  }
+  .d-audio-panel{
+    flex:1;background:var(--navy);border-radius:10px;
+    padding:11px 16px;display:flex;align-items:center;gap:10px;
+  }
+  .d-audio-caption{
+    flex:1;font-size:12px;color:rgba(255,255,255,.9);
+    font-style:italic;line-height:1.45;
+  }
+  .d-play-btn{
+    background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
+    border-radius:20px;color:#fff;font-size:11px;
+    padding:5px 12px;cursor:pointer;font-weight:700;flex-shrink:0;
+  }
+  .d-nav{display:flex;gap:8px;flex-shrink:0;}
+  .d-nav button{
+    padding:0 18px;border-radius:8px;border:1.5px solid var(--border);
+    background:#fff;font-size:12px;font-weight:700;color:#374151;cursor:pointer;
+  }
+  .d-nav button.primary{background:var(--navy);color:#fff;border-color:var(--navy);}
 }
 
-/* ── SCREEN 0: LANDING ── */
-.landing-icon { text-align: center; font-size: 44px; margin-bottom: 14px; }
-.landing-title {
-  text-align: center;
-  font-size: 22px;
-  font-weight: 800;
-  color: #1a3664;
-  margin-bottom: 4px;
-}
-.landing-fy {
-  text-align: center;
-  font-size: 13px;
-  color: #e8620a;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-.landing-desc {
-  text-align: center;
-  font-size: 13px;
-  color: #6b7280;
-  line-height: 1.6;
-  margin-bottom: 6px;
-}
-.landing-time {
-  text-align: center;
-  font-size: 12.5px;
-  color: #374151;
-  margin-bottom: 22px;
-}
-.landing-time strong { color: #1a3664; }
+/* ═══════════════════════════════════════════
+   MOBILE  — phone mockup (< 700 px)
+═══════════════════════════════════════════ */
+@media(max-width:699px){
+  body{display:flex;flex-direction:column;align-items:center;padding:12px 10px 16px;min-height:auto;}
+  .mobile-wrap{display:block;width:100%;max-width:400px;}
 
-/* PATH CARDS */
-.path-cards { display: flex; gap: 14px; }
-.path-card {
-  flex: 1;
-  border: 2px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 18px 14px;
-  text-align: center;
-  cursor: pointer;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
-  background: #fff;
-  position: relative;
-}
-.path-card.recommended {
-  border-color: #1a3664;
-  box-shadow: 0 4px 18px rgba(26,54,100,0.13);
-}
-.rec-badge {
-  position: absolute;
-  top: -10px; left: 50%;
-  transform: translateX(-50%);
-  background: #e8620a;
-  color: #fff;
-  font-size: 9px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 20px;
-  white-space: nowrap;
-  letter-spacing: 0.04em;
-}
-.path-card .card-icon { font-size: 28px; margin-bottom: 8px; }
-.path-card .card-title { font-size: 13px; font-weight: 700; color: #1a3664; margin-bottom: 4px; }
-.path-card .card-desc { font-size: 11px; color: #6b7280; line-height: 1.4; }
-.path-card:hover { transform: translateY(-2px); }
+  /* phone shell */
+  .phone-shell{
+    background:#1e1e1e;border-radius:36px;
+    padding:14px 8px 10px;
+    box-shadow:0 16px 48px rgba(0,0,0,0.28);
+    position:relative;
+  }
+  .phone-notch{
+    width:80px;height:22px;background:#111;border-radius:0 0 14px 14px;
+    margin:0 auto 8px;display:flex;align-items:center;justify-content:center;gap:6px;
+  }
+  .p-cam{width:8px;height:8px;border-radius:50%;background:#333;}
+  .phone-screen{background:#fff;border-radius:24px;overflow:hidden;}
 
-/* ── SCREEN 1: CLIENT TYPE ── */
-.screen-title {
-  font-size: 18px;
-  font-weight: 800;
-  color: #1a3664;
-  margin-bottom: 5px;
-}
-.screen-sub {
-  font-size: 12.5px;
-  color: #6b7280;
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
+  /* phone app header */
+  .phone-header{
+    background:var(--navy);padding:10px 14px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .ph-left{display:flex;align-items:center;gap:8px;}
+  .ph-logo{
+    width:28px;height:28px;background:var(--orange);border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:9px;font-weight:900;color:#fff;flex-shrink:0;
+  }
+  .ph-firm{color:#fff;font-size:11px;font-weight:700;line-height:1.2;}
+  .ph-sub{color:rgba(255,255,255,.6);font-size:8.5px;}
+  .ph-badge{
+    background:rgba(255,255,255,.15);border-radius:20px;
+    padding:3px 8px;font-size:9px;color:#fff;font-weight:600;
+  }
 
-.type-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
-}
-.type-card.selected { border-color: #1a3664; background: #f0f4fb; }
-.type-card .tc-icon { font-size: 24px; flex-shrink: 0; }
-.type-card .tc-label { font-size: 13.5px; font-weight: 700; color: #1a3664; }
-.type-card .tc-desc { font-size: 11px; color: #6b7280; margin-top: 2px; }
+  /* phone screen content */
+  .m-screen-wrap{
+    position:relative;min-height:360px;max-height:480px;
+    overflow-y:auto;overflow-x:hidden;
+    scrollbar-width:thin;scrollbar-color:#d1d5db transparent;
+  }
+  .m-screen{
+    position:absolute;top:0;left:0;right:0;
+    padding:18px 16px 14px;
+    opacity:0;transform:translateX(30px);
+    transition:opacity .4s ease,transform .4s ease;
+    pointer-events:none;
+  }
+  .m-screen.active{opacity:1;transform:translateX(0);pointer-events:auto;position:relative;}
+  .m-screen.exit-left{opacity:0;transform:translateX(-30px);}
 
-/* ── SCREEN 2: DETAILS ── */
-.field-group { margin-bottom: 14px; }
-.field-label { font-size: 11px; font-weight: 700; color: #374151; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.04em; }
-.field-input {
-  width: 100%;
-  border: 1.5px solid #d1d5db;
-  border-radius: 8px;
-  padding: 10px 12px;
-  font-size: 13.5px;
-  color: #1a3664;
-  font-weight: 600;
-  background: #f9fafb;
+  /* phone progress */
+  .m-progress{
+    padding:6px 14px 8px;background:#fff;
+    border-top:1px solid var(--border);
+    display:flex;align-items:center;gap:8px;
+  }
+  .m-progress-track{flex:1;height:3px;background:#e5e7eb;border-radius:3px;overflow:hidden;}
+  .m-progress-fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--orange));border-radius:3px;transition:width .5s;}
+  .m-progress-label{font-size:9px;color:#9ca3af;font-weight:600;white-space:nowrap;}
+
+  /* phone bottom bar */
+  .phone-home-bar{
+    width:80px;height:4px;background:#555;border-radius:2px;
+    margin:8px auto 2px;
+  }
+
+  /* mobile controls below phone */
+  .m-controls{margin-top:12px;display:flex;flex-direction:column;gap:8px;}
+  .m-audio{
+    background:var(--navy);border-radius:10px;padding:10px 14px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .m-audio-caption{flex:1;font-size:11px;color:rgba(255,255,255,.9);font-style:italic;line-height:1.4;}
+  .m-play-btn{
+    background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
+    border-radius:20px;color:#fff;font-size:10px;
+    padding:4px 10px;cursor:pointer;font-weight:700;flex-shrink:0;
+  }
+  .m-nav{display:flex;gap:8px;}
+  .m-nav button{
+    flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);
+    background:#fff;font-size:11px;font-weight:700;color:#374151;cursor:pointer;
+  }
+  .m-nav button.primary{background:var(--navy);color:#fff;border-color:var(--navy);}
 }
 
-/* ── SCREEN 3: INCOME ── */
-.income-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
-.income-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 11px 14px;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 13px;
-  color: #374151;
-  transition: all 0.2s;
-}
-.income-item.checked { border-color: #1a3664; background: #f0f4fb; color: #1a3664; font-weight: 600; }
-.income-item input[type=checkbox] { accent-color: #1a3664; width: 15px; height: 15px; flex-shrink: 0; }
+/* ═══════════════════════════════════════════
+   SHARED COMPONENT STYLES (used in both)
+═══════════════════════════════════════════ */
+.s-title{font-size:clamp(15px,2vw,20px);font-weight:800;color:var(--navy);margin-bottom:5px;}
+.s-sub{font-size:clamp(11px,1.3vw,13px);color:var(--grey);margin-bottom:16px;line-height:1.55;}
+.s-fy{font-size:clamp(11px,1.3vw,13px);color:var(--orange);font-weight:700;margin-bottom:8px;}
+.s-desc{font-size:clamp(11px,1.2vw,13px);color:var(--grey);line-height:1.6;margin-bottom:6px;}
+.s-time{font-size:clamp(11px,1.2vw,12.5px);color:#374151;margin-bottom:20px;}
 
-/* ── SCREEN 4: REQUIREMENT LIST ── */
-.req-section-title {
-  font-size: 11px;
-  font-weight: 800;
-  color: #e8620a;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin: 16px 0 7px;
+/* path cards */
+.path-cards{display:flex;gap:12px;margin-bottom:4px;}
+.path-card{
+  flex:1;border:2px solid var(--border);border-radius:12px;
+  padding:14px 10px;text-align:center;cursor:pointer;
+  transition:border-color .2s,box-shadow .2s;background:#fff;position:relative;
 }
-.req-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 11px;
-  background: #f8f9fb;
-  border-radius: 8px;
-  margin-bottom: 6px;
-  font-size: 12.5px;
-  color: #374151;
-  border: 1px solid #e5e7eb;
+.path-card.rec{border-color:var(--navy);box-shadow:0 4px 16px rgba(26,54,100,.12);}
+.rec-badge{
+  position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  background:var(--orange);color:#fff;font-size:8.5px;font-weight:700;
+  padding:3px 9px;border-radius:20px;white-space:nowrap;
 }
-.req-item .dot { color: #1a3664; font-size: 18px; flex-shrink: 0; }
-.upload-btn {
-  margin-left: auto;
-  font-size: 10px;
-  padding: 4px 9px;
-  border: 1.5px solid #1a3664;
-  border-radius: 6px;
-  color: #1a3664;
-  background: #fff;
-  cursor: pointer;
-  flex-shrink: 0;
-  font-weight: 700;
-}
-.upload-btn.done { background: #1a3664; color: #fff; border-color: #1a3664; }
-.upload-btn.help { border-color: #e8620a; color: #e8620a; }
+.path-card .ci{font-size:22px;margin-bottom:6px;}
+.path-card .ct{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.path-card .cd{font-size:10.5px;color:var(--grey);line-height:1.35;}
 
-/* ── AI CHAT ── */
-.chat-panel {
-  margin-top: 18px;
-  border: 1.5px solid #dbeafe;
-  border-radius: 12px;
-  background: #f0f7ff;
-  padding: 14px;
+/* type cards */
+.type-card{
+  display:flex;align-items:center;gap:12px;
+  border:2px solid var(--border);border-radius:10px;
+  padding:12px 14px;margin-bottom:10px;cursor:pointer;
+  transition:border-color .2s,background .2s;
 }
-.chat-panel-title {
-  font-size: 11px;
-  font-weight: 800;
-  color: #1a3664;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.ai-badge {
-  background: #1a3664;
-  color: #fff;
-  font-size: 9px;
-  padding: 2px 7px;
-  border-radius: 20px;
-  font-weight: 700;
-}
-.chat-bubble {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
-  align-items: flex-start;
-}
-.chat-avatar {
-  width: 28px; height: 28px;
-  background: #1a3664;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 900; color: #fff;
-  flex-shrink: 0;
-}
-.chat-msg {
-  background: #fff;
-  border-radius: 12px 12px 12px 2px;
-  padding: 8px 11px;
-  font-size: 12px;
-  color: #374151;
-  line-height: 1.5;
-  border: 1px solid #dbeafe;
-  max-width: 290px;
-}
-.user-bubble { justify-content: flex-end; }
-.user-bubble .chat-msg {
-  background: #1a3664;
-  color: #fff;
-  border-radius: 12px 12px 2px 12px;
-  border-color: transparent;
-}
-.chat-input-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
-}
-.chat-input {
-  flex: 1;
-  border: 1.5px solid #d1d5db;
-  border-radius: 20px;
-  padding: 8px 14px;
-  font-size: 12px;
-  background: #fff;
-  color: #374151;
-}
-.chat-send {
-  width: 34px; height: 34px;
-  background: #1a3664;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px;
-  color: #fff;
-  flex-shrink: 0;
+.type-card.sel{border-color:var(--navy);background:#f0f4fb;}
+.tc-icon{font-size:20px;flex-shrink:0;}
+.tc-label{font-size:13px;font-weight:700;color:var(--navy);}
+.tc-desc{font-size:10.5px;color:var(--grey);margin-top:2px;}
+
+/* field */
+.fl{font-size:10.5px;font-weight:700;color:#374151;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em;}
+.fi{
+  width:100%;border:1.5px solid var(--border);border-radius:7px;
+  padding:9px 11px;font-size:13px;color:var(--navy);font-weight:600;
+  background:#f9fafb;margin-bottom:11px;
 }
 
-/* ── OFFLINE PATH ── */
-.offline-panel {
-  background: #fff8f0;
-  border: 1.5px solid #fed7aa;
-  border-radius: 12px;
-  padding: 16px;
-  margin-top: 14px;
+/* income items */
+.inc-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border:1.5px solid var(--border);border-radius:9px;
+  margin-bottom:7px;cursor:pointer;font-size:12.5px;color:#374151;
+  transition:all .2s;
 }
-.offline-panel .op-title { font-size: 13px; font-weight: 700; color: #92400e; margin-bottom: 6px; }
-.offline-panel .op-desc { font-size: 12px; color: #78350f; line-height: 1.5; margin-bottom: 12px; }
-.offline-actions { display: flex; gap: 8px; }
-.btn-wa { flex:1; background: #25d366; color:#fff; border:none; border-radius:8px; padding:9px; font-size:12px; font-weight:700; cursor:pointer; }
-.btn-pdf { flex:1; background:#fff; color:#92400e; border:1.5px solid #fed7aa; border-radius:8px; padding:9px; font-size:12px; font-weight:700; cursor:pointer; }
+.inc-item.chk{border-color:var(--navy);background:#f0f4fb;color:var(--navy);font-weight:600;}
+.inc-item input{accent-color:var(--navy);width:14px;height:14px;flex-shrink:0;}
 
-/* ── BUTTONS ── */
-.btn {
-  display: block; width: 100%;
-  padding: 12px; border-radius: 10px;
-  font-size: 13.5px; font-weight: 700;
-  cursor: pointer; border: none; text-align: center;
-  margin-top: 16px;
-  transition: transform 0.1s, box-shadow 0.15s;
+/* req items */
+.req-sec{font-size:10px;font-weight:800;color:var(--orange);text-transform:uppercase;letter-spacing:.06em;margin:12px 0 5px;}
+.req-item{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 10px;background:#f8f9fb;border-radius:7px;
+  margin-bottom:5px;font-size:11.5px;color:#374151;border:1px solid var(--border);
 }
-.btn:active { transform: scale(0.98); }
-.btn-primary {
-  background: linear-gradient(135deg, #1a3664, #2457a0);
-  color: #fff;
-  box-shadow: 0 4px 16px rgba(26,54,100,0.3);
+.req-item .dot{color:var(--navy);font-size:16px;flex-shrink:0;}
+.up-btn{
+  margin-left:auto;font-size:9.5px;padding:3px 8px;
+  border:1.5px solid var(--navy);border-radius:5px;
+  color:var(--navy);background:#fff;cursor:pointer;flex-shrink:0;font-weight:700;
 }
-.btn-primary:hover { box-shadow: 0 6px 22px rgba(26,54,100,0.4); }
+.up-btn.done{background:var(--navy);color:#fff;}
+.up-btn.help{border-color:var(--orange);color:var(--orange);}
 
-/* ── SUCCESS ── */
-.success-icon { text-align:center; font-size:52px; margin:20px 0 12px; }
-.success-title { text-align:center; font-size:22px; font-weight:800; color:#16a34a; margin-bottom:8px; }
-.success-msg { text-align:center; font-size:13px; color:#6b7280; line-height:1.65; margin-bottom:20px; }
-.contact-row { display:flex; gap:10px; margin-bottom:6px; }
-.contact-chip {
-  flex:1; text-align:center; padding:10px 6px;
-  border-radius:10px; font-size:12px; font-weight:700;
-  border: 1.5px solid;
+/* chat panel */
+.chat-panel{
+  margin-top:14px;border:1.5px solid #dbeafe;border-radius:10px;
+  background:#f0f7ff;padding:12px;
 }
-.chip-wa  { background:#f0fdf4; border-color:#86efac; color:#16a34a; }
-.chip-ph  { background:#f0f4ff; border-color:#a5b4fc; color:#1a3664; }
-.chip-em  { background:#fff7ed; border-color:#fdba74; color:#92400e; }
-.contact-note { text-align:center; font-size:11px; color:#9ca3af; margin-top:6px; }
+.chat-head{font-size:10px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+.ai-badge{background:var(--navy);color:#fff;font-size:8px;padding:2px 6px;border-radius:20px;font-weight:700;}
+.chat-bbl{display:flex;gap:7px;margin-bottom:7px;align-items:flex-start;}
+.chat-av{width:24px;height:24px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#fff;flex-shrink:0;}
+.chat-msg{background:#fff;border-radius:10px 10px 10px 2px;padding:7px 10px;font-size:11px;color:#374151;line-height:1.45;border:1px solid #dbeafe;max-width:240px;}
+.user-bbl{justify-content:flex-end;}
+.user-bbl .chat-msg{background:var(--navy);color:#fff;border-radius:10px 10px 2px 10px;border-color:transparent;}
+.chat-row{display:flex;gap:6px;margin-top:8px;}
+.chat-in{flex:1;border:1.5px solid var(--border);border-radius:18px;padding:6px 12px;font-size:11px;background:#fff;}
+.chat-snd{width:30px;height:30px;background:var(--navy);border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;flex-shrink:0;}
 
-/* ── PROGRESS ── */
-.progress-bar-wrap {
-  padding: 10px 20px 12px;
-  border-top: 1px solid #f3f4f6;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* save banner */
+.save-banner{
+  margin-top:10px;padding:10px 12px;background:#f0f7ff;
+  border:1.5px dashed #93c5fd;border-radius:8px;display:none;
 }
-.progress-track {
-  flex: 1;
-  height: 4px;
-  background: #e5e7eb;
-  border-radius: 4px;
-  overflow: hidden;
-}
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #1a3664, #e8620a);
-  border-radius: 4px;
-  transition: width 0.5s ease;
-}
-.progress-label { font-size: 10px; color: #9ca3af; white-space: nowrap; font-weight: 600; }
+.save-banner .sb-title{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:2px;}
+.save-banner .sb-desc{font-size:10.5px;color:#374151;}
 
-/* ── AUDIO PANEL ── */
-.audio-panel {
-  width: 100%;
-  background: #1a3664;
-  border-radius: 0 0 12px 12px;
-  padding: 10px 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* shared buttons */
+.btn{
+  display:block;width:100%;padding:10px;border-radius:9px;
+  font-size:13px;font-weight:700;cursor:pointer;border:none;text-align:center;margin-top:12px;
 }
-.audio-icon { font-size: 18px; flex-shrink: 0; }
-.audio-caption {
-  flex: 1;
-  font-size: 12.5px;
-  color: rgba(255,255,255,0.9);
-  line-height: 1.45;
-  font-style: italic;
-}
-.audio-toggle {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 20px;
-  color: #fff;
-  font-size: 11px;
-  padding: 4px 10px;
-  cursor: pointer;
-  flex-shrink: 0;
-  font-weight: 600;
-}
-.audio-toggle:hover { background: rgba(255,255,255,0.25); }
+.btn-p{background:linear-gradient(135deg,var(--navy),#2457a0);color:#fff;box-shadow:0 4px 14px rgba(26,54,100,.28);}
+.btn-s{background:#f3f6fb;color:var(--navy);border:1.5px solid #c7d6f0;font-size:12px;}
 
-/* ── CONTROLS ── */
-.controls {
-  margin-top: 14px;
-  display: flex;
-  gap: 8px;
-  width: 100%;
-}
-.ctrl-btn {
-  flex: 1;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1.5px solid #d1d5db;
-  background: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  color: #374151;
-  cursor: pointer;
-  text-align: center;
-}
-.ctrl-btn:hover { background: #f3f4f6; }
-.ctrl-btn.primary { background: #1a3664; color: #fff; border-color: #1a3664; }
+/* success */
+.succ-icon{text-align:center;font-size:44px;margin:16px 0 10px;}
+.succ-title{text-align:center;font-size:18px;font-weight:800;color:#16a34a;margin-bottom:6px;}
+.succ-msg{text-align:center;font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:16px;}
+.succ-chips{display:flex;gap:8px;margin-bottom:6px;}
+.chip{flex:1;text-align:center;padding:8px 4px;border-radius:9px;font-size:11px;font-weight:700;border:1.5px solid;}
+.chip-wa{background:#f0fdf4;border-color:#86efac;color:#16a34a;}
+.chip-ph{background:#f0f4ff;border-color:#a5b4fc;color:var(--navy);}
+.chip-em{background:#fff7ed;border-color:#fdba74;color:#92400e;}
+.succ-note{text-align:center;font-size:10px;color:#9ca3af;margin-top:4px;}
 
-/* ── HIGHLIGHT PULSE ── */
-@keyframes pulse-border {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(232,98,10,0.5); }
-  50% { box-shadow: 0 0 0 6px rgba(232,98,10,0); }
-}
-.pulse { animation: pulse-border 1.5s ease-in-out 3; }
+/* pulse animation for recommended card */
+@keyframes pulse-border{0%,100%{box-shadow:0 0 0 0 rgba(232,98,10,.5);}50%{box-shadow:0 0 0 6px rgba(232,98,10,0);}}
+.pulse{animation:pulse-border 1.5s ease-in-out 3;}
 
-/* ── TOOLTIP ── */
-.tooltip {
-  position: absolute;
-  background: #1a3664;
-  color: #fff;
-  font-size: 11.5px;
-  padding: 6px 12px;
-  border-radius: 8px;
-  pointer-events: none;
-  z-index: 10;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.3s;
-  font-weight: 600;
+/* desktop right-pane preview illustrations */
+.preview-steps{width:100%;display:flex;flex-direction:column;gap:8px;}
+.prev-step{
+  background:#fff;border-radius:8px;padding:10px 12px;
+  display:flex;align-items:center;gap:10px;
+  border:1.5px solid var(--border);font-size:12px;color:#374151;
 }
-.tooltip::after {
-  content: '';
-  position: absolute;
-  bottom: -6px; left: 50%;
-  transform: translateX(-50%);
-  border: 6px solid transparent;
-  border-bottom: none;
-  border-top-color: #1a3664;
+.prev-step .ps-num{
+  width:24px;height:24px;border-radius:50%;background:var(--navy);
+  color:#fff;font-size:11px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
-.tooltip.show { opacity: 1; }
-
+.prev-step.active-step{border-color:var(--navy);background:#f0f4fb;color:var(--navy);font-weight:600;}
+.prev-step.done-step{border-color:#86efac;background:#f0fdf4;}
+.prev-step.done-step .ps-num{background:#16a34a;}
+.prev-label{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px;text-align:center;}
 </style>
 </head>
 <body>
 
-<div class="demo-wrap">
+<!-- ═══════ DESKTOP LAYOUT ═══════ -->
+<div class="desktop-wrap">
 
-  <!-- ── LEFT: PHONE SIMULATION ── -->
-  <div class="demo-phone">
+  <!-- Laptop shell -->
+  <div class="laptop-shell">
+    <div class="laptop-camera-bar"><div class="laptop-camera"></div></div>
+    <div class="laptop-screen">
 
-    <!-- BROWSER CHROME -->
-    <div class="browser-chrome">
-      <div class="browser-dots">
-        <span class="bd-r"></span>
-        <span class="bd-y"></span>
-        <span class="bd-g"></span>
+      <!-- Browser bar -->
+      <div class="browser-bar">
+        <div class="bdots"><span class="bd-r"></span><span class="bd-y"></span><span class="bd-g"></span></div>
+        <div class="burl"><span class="lock">🔒</span> carpmassociates.com/itr-fy-2025-26</div>
       </div>
-      <div class="browser-url">
-        <span class="lock">🔒</span> carpmassociates.com/itr-fy-2025-26
-      </div>
-    </div>
 
-    <!-- APP FRAME -->
-    <div class="app-frame">
-
-      <!-- REAL HEADER -->
+      <!-- App header -->
       <div class="app-header">
-        <div class="header-left">
+        <div class="hdr-left">
           <div class="rpm-logo">RPM</div>
-          <div class="header-firm">
-            <div class="firm-name">Rawlani Pawar Mulay &amp; Associates LLP</div>
-            <div class="firm-sub">Chartered Accountants</div>
+          <div>
+            <div class="hdr-firm-name">Rawlani Pawar Mulay & Associates LLP</div>
+            <div class="hdr-firm-sub">Chartered Accountants</div>
           </div>
         </div>
         <div class="fy-badge">FY 2025-26 | AY 2026-27</div>
       </div>
 
-      <!-- SCREENS -->
-      <div class="screen-wrap" id="screen-wrap">
+      <!-- Screens area -->
+      <div class="d-screen-wrap" id="d-screen-wrap">
 
-        <!-- SCREEN 0: LANDING -->
-        <div class="screen active" id="screen-0">
-          <div class="landing-icon">📋</div>
-          <div class="landing-title">ITR Document Submission</div>
-          <div class="landing-fy">FY 2025-26 (AY 2026-27)</div>
-          <div class="landing-desc">Welcome! This tool helps you share the right documents for your Income Tax Return filing — quickly and securely.</div>
-          <div class="landing-time">It takes about <strong>5 minutes</strong>. Choose how you'd like to proceed:</div>
+        <!-- D-SCREEN 0: LANDING -->
+        <div class="d-screen active" id="d-s0">
+          <div class="d-left">
+            <div style="font-size:36px;margin-bottom:10px;">📋</div>
+            <div class="s-title">ITR Document Submission</div>
+            <div class="s-fy">FY 2025-26 (AY 2026-27)</div>
+            <div class="s-desc">Welcome! This tool helps you share the right documents for your Income Tax Return filing — quickly and securely.</div>
+            <div class="s-time">Takes about <strong>5 minutes</strong>. Choose how to proceed:</div>
+            <div class="path-cards">
+              <div class="path-card rec" id="d-card-online">
+                <div class="rec-badge">⭐ RECOMMENDED</div>
+                <div class="ci">☁️</div>
+                <div class="ct">Upload Online</div>
+                <div class="cd">Answer a few questions and upload documents directly. Secure & instant.</div>
+              </div>
+              <div class="path-card" id="d-card-offline">
+                <div class="ci">📄</div>
+                <div class="ct">Offline / WhatsApp</div>
+                <div class="cd">Download your checklist and send documents via WhatsApp or Email.</div>
+              </div>
+            </div>
+          </div>
+          <div class="d-right">
+            <div class="prev-label">How it works</div>
+            <div class="preview-steps">
+              <div class="prev-step active-step"><div class="ps-num">1</div> Choose how you'd like to proceed</div>
+              <div class="prev-step"><div class="ps-num">2</div> Tell us if you're existing or new client</div>
+              <div class="prev-step"><div class="ps-num">3</div> Select your income sources</div>
+              <div class="prev-step"><div class="ps-num">4</div> Upload documents from your checklist</div>
+              <div class="prev-step"><div class="ps-num">5</div> Submit — we contact you in 2 days</div>
+            </div>
+          </div>
+        </div>
 
+        <!-- D-SCREEN 1: CLIENT TYPE -->
+        <div class="d-screen" id="d-s1">
+          <div class="d-left">
+            <div class="s-title">Are you an existing client?</div>
+            <div class="s-sub">This helps us personalise your document checklist.</div>
+            <div class="type-card sel" id="d-existing"><div class="tc-icon">🔄</div><div><div class="tc-label">Existing Client</div><div class="tc-desc">Filed ITR with us before</div></div></div>
+            <div class="type-card" id="d-new"><div class="tc-icon">🆕</div><div><div class="tc-label">New Client</div><div class="tc-desc">First time — PAN & Aadhaar copy also needed</div></div></div>
+          </div>
+          <div class="d-right">
+            <div class="prev-label">How it works</div>
+            <div class="preview-steps">
+              <div class="prev-step done-step"><div class="ps-num">✓</div> Choose how to proceed</div>
+              <div class="prev-step active-step"><div class="ps-num">2</div> Existing or new client?</div>
+              <div class="prev-step"><div class="ps-num">3</div> Select your income sources</div>
+              <div class="prev-step"><div class="ps-num">4</div> Upload your documents</div>
+              <div class="prev-step"><div class="ps-num">5</div> Submit & done</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- D-SCREEN 2: DETAILS -->
+        <div class="d-screen" id="d-s2">
+          <div class="d-left">
+            <div class="s-title">Your Details</div>
+            <div class="s-sub">We use this to organise your folder on our secure system. No login needed.</div>
+            <div class="fl">Full Name</div>
+            <input class="fi" id="d-name" type="text" placeholder="e.g. Ramesh Sharma" readonly>
+            <div class="fl">Mobile Number</div>
+            <input class="fi" id="d-mobile" type="text" placeholder="e.g. 98765 43210" readonly>
+          </div>
+          <div class="d-right">
+            <div class="prev-label">How it works</div>
+            <div class="preview-steps">
+              <div class="prev-step done-step"><div class="ps-num">✓</div> Choose how to proceed</div>
+              <div class="prev-step done-step"><div class="ps-num">✓</div> Client type confirmed</div>
+              <div class="prev-step active-step"><div class="ps-num">3</div> Enter your details</div>
+              <div class="prev-step"><div class="ps-num">4</div> Select income sources</div>
+              <div class="prev-step"><div class="ps-num">5</div> Upload & submit</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- D-SCREEN 3: INCOME -->
+        <div class="d-screen" id="d-s3">
+          <div class="d-left">
+            <div class="s-title">Your Income Sources</div>
+            <div class="s-sub">Select all that apply for FY 2025-26. Your checklist is tailored automatically.</div>
+            <div id="d-inc-salary" class="inc-item"><input type="checkbox"> 💼 Salaried employee</div>
+            <div id="d-inc-cg" class="inc-item"><input type="checkbox"> 📈 Sold shares / mutual funds / property</div>
+            <div id="d-inc-rental" class="inc-item"><input type="checkbox"> 🏠 Rental income</div>
+            <div id="d-inc-biz" class="inc-item"><input type="checkbox"> 🏢 Business income</div>
+            <div id="d-inc-fo" class="inc-item"><input type="checkbox"> 📊 F&O trading</div>
+            <div id="d-inc-crypto" class="inc-item"><input type="checkbox"> 🪙 Crypto trading</div>
+          </div>
+          <div class="d-right">
+            <div class="prev-label">How it works</div>
+            <div class="preview-steps">
+              <div class="prev-step done-step"><div class="ps-num">✓</div> Choose how to proceed</div>
+              <div class="prev-step done-step"><div class="ps-num">✓</div> Client type confirmed</div>
+              <div class="prev-step done-step"><div class="ps-num">✓</div> Details entered</div>
+              <div class="prev-step active-step"><div class="ps-num">4</div> Select income sources</div>
+              <div class="prev-step"><div class="ps-num">5</div> Upload & submit</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- D-SCREEN 4: CHECKLIST -->
+        <div class="d-screen" id="d-s4">
+          <div class="d-left" style="overflow-y:auto;max-height:420px;">
+            <div class="s-title">Your Document Checklist</div>
+            <div class="s-sub">Upload each document. Click Help? if unsure where to find it.</div>
+            <div class="req-sec">📋 Salary</div>
+            <div class="req-item"><span class="dot">•</span>Form 16 (Part A & B)<button class="up-btn" id="d-up1">⬆ Upload</button></div>
+            <div class="req-item"><span class="dot">•</span>Salary slips (Apr–Mar)<button class="up-btn" id="d-up2">⬆ Upload</button></div>
+            <div class="req-item"><span class="dot">•</span>AIS / TIS — IT Portal<button class="up-btn help">Help?</button></div>
+            <div class="req-item"><span class="dot">•</span>Bank statements<button class="up-btn" id="d-up4">⬆ Upload</button></div>
+            <div class="req-sec">📈 Capital Gains</div>
+            <div class="req-item"><span class="dot">•</span>Capital Gains statement<button class="up-btn help">Help?</button></div>
+            <div class="req-item"><span class="dot">•</span>Dividend income statement<button class="up-btn">⬆ Upload</button></div>
+            <div id="d-save-banner" class="save-banner">
+              <div class="sb-title">✅ Progress saved!</div>
+              <div class="sb-desc">Come back anytime using the same link — files & selections will be waiting.</div>
+            </div>
+            <button class="btn btn-p" style="margin-top:10px;">Submit All Documents →</button>
+            <button class="btn btn-s" id="d-save-btn">💾 Save & Continue Later</button>
+          </div>
+          <div class="d-right" style="justify-content:flex-start;padding-top:20px;">
+            <div class="chat-panel" style="width:100%;">
+              <div class="chat-head">💬 AI Assistant <span class="ai-badge">LIVE</span></div>
+              <div class="chat-bbl"><div class="chat-av">AI</div><div class="chat-msg" id="d-ai-msg">Hi! I can help you find or download any document. What do you need help with?</div></div>
+              <div class="chat-bbl user-bbl" id="d-user-q" style="display:none"><div class="chat-msg">How do I download the AIS?</div></div>
+              <div class="chat-bbl" id="d-ai-reply" style="display:none"><div class="chat-av">AI</div><div class="chat-msg">Go to <strong>incometax.gov.in</strong> → Login → AIS tab → Download PDF. 😊</div></div>
+              <div class="chat-row">
+                <input class="chat-in" id="d-chat-in" placeholder="Ask anything…" readonly>
+                <button class="chat-snd">➤</button>
+              </div>
+            </div>
+            <div style="margin-top:10px;padding:10px 12px;background:#f0f4fb;border-radius:8px;border:1.5px dashed var(--navy);width:100%;">
+              <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:3px;">💡 Don't have all documents?</div>
+              <div style="font-size:10.5px;color:#374151;line-height:1.5;">Upload what you have and click <strong>Save & Continue Later</strong>. Come back anytime using the same link.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- D-SCREEN 5: SUCCESS -->
+        <div class="d-screen" id="d-s5">
+          <div class="d-left" style="align-items:center;text-align:center;">
+            <div class="succ-icon">✅</div>
+            <div class="succ-title">Documents Submitted!</div>
+            <div class="succ-msg">Thank you, <strong>Ramesh</strong>! Your documents are securely saved.<br>Our team will contact you within <strong>2 working days</strong>.</div>
+            <div class="succ-chips">
+              <div class="chip chip-wa">💬 WhatsApp</div>
+              <div class="chip chip-ph">📞 Call</div>
+              <div class="chip chip-em">✉ Email</div>
+            </div>
+            <div class="succ-note">+91 74990 79092 · team@carpmassociates.com</div>
+          </div>
+          <div class="d-right">
+            <div class="prev-label">All done! 🎉</div>
+            <div class="preview-steps">
+              <div class="prev-step done-step"><div class="ps-num">✓</div> Choose how to proceed</div>
+              <div class="prev-step done-step"><div class="ps-num">✓</div> Client type confirmed</div>
+              <div class="prev-step done-step"><div class="ps-num">✓</div> Details entered</div>
+              <div class="prev-step done-step"><div class="ps-num">✓</div> Income sources selected</div>
+              <div class="prev-step done-step"><div class="ps-num">✓</div> Documents submitted</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /d-screen-wrap -->
+
+      <!-- Progress bar -->
+      <div class="d-progress">
+        <div class="d-progress-label" id="d-step-label">Choose path</div>
+        <div class="d-progress-track"><div class="d-progress-fill" id="d-fill" style="width:10%"></div></div>
+      </div>
+
+    </div><!-- /laptop-screen -->
+  </div><!-- /laptop-shell -->
+
+  <div class="laptop-base"><div class="laptop-notch"></div></div>
+  <div class="laptop-foot"></div>
+
+  <!-- Controls below laptop -->
+  <div class="d-controls">
+    <div class="d-audio-panel">
+      <span style="font-size:18px;" id="d-audio-icon">🔊</span>
+      <div class="d-audio-caption" id="d-caption">Press ▶ Play for guided audio tour, or use Next/Prev to browse manually.</div>
+      <button class="d-play-btn" id="d-play-btn" onclick="dToggle()">▶ Play</button>
+    </div>
+    <div class="d-nav">
+      <button onclick="dPrev()">← Prev</button>
+      <button class="primary" onclick="dStart()">↺ Replay</button>
+      <button onclick="dNext()">Next →</button>
+    </div>
+  </div>
+
+</div><!-- /desktop-wrap -->
+
+
+<!-- ═══════ MOBILE LAYOUT ═══════ -->
+<div class="mobile-wrap">
+
+  <div class="phone-shell">
+    <div class="phone-notch"><div class="p-cam"></div><div style="width:28px;height:4px;background:#444;border-radius:2px;"></div><div class="p-cam"></div></div>
+    <div class="phone-screen">
+
+      <!-- Phone header -->
+      <div class="phone-header">
+        <div class="ph-left">
+          <div class="ph-logo">RPM</div>
+          <div>
+            <div class="ph-firm">Rawlani Pawar Mulay & Associates LLP</div>
+            <div class="ph-sub">Chartered Accountants</div>
+          </div>
+        </div>
+        <div class="ph-badge">FY 2025-26</div>
+      </div>
+
+      <!-- Mobile screens -->
+      <div class="m-screen-wrap" id="m-screen-wrap">
+
+        <!-- M-SCREEN 0: LANDING -->
+        <div class="m-screen active" id="m-s0">
+          <div style="text-align:center;font-size:32px;margin-bottom:10px;">📋</div>
+          <div class="s-title" style="text-align:center;">ITR Document Submission</div>
+          <div class="s-fy" style="text-align:center;">FY 2025-26 (AY 2026-27)</div>
+          <div class="s-desc" style="text-align:center;">This tool helps you share the right documents for your ITR filing — quickly and securely.</div>
+          <div class="s-time" style="text-align:center;margin-bottom:16px;">Takes about <strong>5 minutes</strong>.</div>
           <div class="path-cards">
-            <div class="path-card recommended" id="card-online">
-              <div class="rec-badge">⭐ RECOMMENDED</div>
-              <div class="card-icon">☁️</div>
-              <div class="card-title">Upload Online</div>
-              <div class="card-desc">Answer a few questions and upload documents directly. Secure &amp; instant.</div>
-            </div>
-            <div class="path-card" id="card-offline">
-              <div class="card-icon">📄</div>
-              <div class="card-title">Offline / WhatsApp</div>
-              <div class="card-desc">Download your requirement list and send documents via WhatsApp or Email.</div>
-            </div>
+            <div class="path-card rec"><div class="rec-badge">⭐ RECOMMENDED</div><div class="ci">☁️</div><div class="ct">Upload Online</div><div class="cd">Secure & instant upload.</div></div>
+            <div class="path-card"><div class="ci">📄</div><div class="ct">Offline</div><div class="cd">Download PDF & WhatsApp us.</div></div>
           </div>
         </div>
 
-        <!-- SCREEN 1: CLIENT TYPE -->
-        <div class="screen" id="screen-1">
-          <div class="screen-title">Are you an existing client?</div>
-          <div class="screen-sub">This helps us personalise your checklist.</div>
-          <div class="type-card selected" id="card-existing">
-            <div class="tc-icon">🔄</div>
-            <div>
-              <div class="tc-label">Existing Client</div>
-              <div class="tc-desc">Filed ITR with Rawlani Pawar Mulay &amp; Associates before</div>
-            </div>
-          </div>
-          <div class="type-card" id="card-new">
-            <div class="tc-icon">🆕</div>
-            <div>
-              <div class="tc-label">New Client</div>
-              <div class="tc-desc">First time with our firm — PAN &amp; Aadhaar copy also needed</div>
-            </div>
-          </div>
+        <!-- M-SCREEN 1: CLIENT TYPE -->
+        <div class="m-screen" id="m-s1">
+          <div class="s-title">Are you an existing client?</div>
+          <div class="s-sub">This personalises your document checklist.</div>
+          <div class="type-card sel"><div class="tc-icon">🔄</div><div><div class="tc-label">Existing Client</div><div class="tc-desc">Filed ITR with us before</div></div></div>
+          <div class="type-card"><div class="tc-icon">🆕</div><div><div class="tc-label">New Client</div><div class="tc-desc">First time — PAN & Aadhaar needed</div></div></div>
         </div>
 
-        <!-- SCREEN 2: BASIC DETAILS -->
-        <div class="screen" id="screen-2">
-          <div class="screen-title">Your Details</div>
-          <div class="screen-sub">We use this to organise your folder on our secure system.</div>
-          <div class="field-group">
-            <div class="field-label">Full Name</div>
-            <input class="field-input" id="name-input" type="text" placeholder="e.g. Ramesh Sharma" readonly>
-          </div>
-          <div class="field-group">
-            <div class="field-label">Mobile Number</div>
-            <input class="field-input" id="mobile-input" type="text" placeholder="e.g. 98765 43210" readonly>
-          </div>
-          <button class="btn btn-primary" id="btn-details">Continue →</button>
+        <!-- M-SCREEN 2: DETAILS -->
+        <div class="m-screen" id="m-s2">
+          <div class="s-title">Your Details</div>
+          <div class="s-sub">No login needed — just your name and mobile.</div>
+          <div class="fl">Full Name</div>
+          <input class="fi" id="m-name" type="text" placeholder="e.g. Ramesh Sharma" readonly>
+          <div class="fl">Mobile Number</div>
+          <input class="fi" id="m-mobile" type="text" placeholder="e.g. 98765 43210" readonly>
         </div>
 
-        <!-- SCREEN 3: INCOME -->
-        <div class="screen" id="screen-3">
-          <div class="screen-title">Your Income Sources</div>
-          <div class="screen-sub">Select all that apply for FY 2025-26. Your document list will be tailored to your selections.</div>
-          <div class="income-grid">
-            <div class="income-item" id="inc-salary"><input type="checkbox"> 💼 Salaried employee</div>
-            <div class="income-item" id="inc-cg"><input type="checkbox"> 📈 Sold shares / mutual funds / property</div>
-            <div class="income-item" id="inc-rental"><input type="checkbox"> 🏠 Rental income</div>
-            <div class="income-item" id="inc-biz"><input type="checkbox"> 🏢 Business income</div>
-            <div class="income-item" id="inc-fo"><input type="checkbox"> 📊 F&amp;O trading</div>
-            <div class="income-item" id="inc-crypto"><input type="checkbox"> 🪙 Crypto trading</div>
-          </div>
-          <button class="btn btn-primary" id="btn-income">Show My Document Checklist →</button>
+        <!-- M-SCREEN 3: INCOME -->
+        <div class="m-screen" id="m-s3">
+          <div class="s-title">Your Income Sources</div>
+          <div class="s-sub">Select all that apply for FY 2025-26.</div>
+          <div id="m-inc-salary" class="inc-item"><input type="checkbox"> 💼 Salaried employee</div>
+          <div id="m-inc-cg" class="inc-item"><input type="checkbox"> 📈 Shares / MF / Property</div>
+          <div id="m-inc-rental" class="inc-item"><input type="checkbox"> 🏠 Rental income</div>
+          <div id="m-inc-biz" class="inc-item"><input type="checkbox"> 🏢 Business income</div>
+          <div id="m-inc-fo" class="inc-item"><input type="checkbox"> 📊 F&O trading</div>
+          <div id="m-inc-crypto" class="inc-item"><input type="checkbox"> 🪙 Crypto trading</div>
         </div>
 
-        <!-- SCREEN 4: CHECKLIST + UPLOAD + AI CHAT -->
-        <div class="screen" id="screen-4">
-          <div class="screen-title">Your Document Checklist</div>
-          <div class="screen-sub">Upload each document below. Use the <strong>Help?</strong> button if you're unsure where to find it.</div>
+        <!-- M-SCREEN 4: CHECKLIST -->
+        <div class="m-screen" id="m-s4">
+          <div class="s-title">Your Document Checklist</div>
+          <div class="s-sub">Upload each. Tap Help? if unsure where to find it.</div>
+          <div class="req-sec">📋 Salary</div>
+          <div class="req-item"><span class="dot">•</span>Form 16<button class="up-btn" id="m-up1">⬆ Upload</button></div>
+          <div class="req-item"><span class="dot">•</span>Salary slips<button class="up-btn" id="m-up2">⬆ Upload</button></div>
+          <div class="req-item"><span class="dot">•</span>AIS / TIS<button class="up-btn help">Help?</button></div>
+          <div class="req-item"><span class="dot">•</span>Bank statements<button class="up-btn">⬆ Upload</button></div>
+          <div class="req-sec">📈 Capital Gains</div>
+          <div class="req-item"><span class="dot">•</span>Capital Gains statement<button class="up-btn help">Help?</button></div>
 
-          <div class="req-section-title">📋 Salary</div>
-          <div class="req-item"><span class="dot">•</span> Form 16 (Part A &amp; B) <button class="upload-btn" id="up1">⬆ Upload</button></div>
-          <div class="req-item"><span class="dot">•</span> Salary slips (Apr–Mar) <button class="upload-btn" id="up2">⬆ Upload</button></div>
-          <div class="req-item"><span class="dot">•</span> AIS / TIS — Income Tax Portal <button class="upload-btn help" id="up3">Help?</button></div>
-          <div class="req-item"><span class="dot">•</span> Bank statements (all accounts) <button class="upload-btn" id="up4">⬆ Upload</button></div>
-
-          <div class="req-section-title">📈 Capital Gains</div>
-          <div class="req-item"><span class="dot">•</span> Capital Gains statement from broker <button class="upload-btn help" id="up5">Help?</button></div>
-          <div class="req-item"><span class="dot">•</span> Dividend income statement <button class="upload-btn" id="up6">⬆ Upload</button></div>
-
-          <!-- AI CHAT -->
-          <div class="chat-panel" id="chat-panel">
-            <div class="chat-panel-title">
-              💬 Have a question?
-              <span class="ai-badge">AI Assistant</span>
-            </div>
-            <div class="chat-bubble">
-              <div class="chat-avatar">AI</div>
-              <div class="chat-msg" id="ai-msg1">Hi! I can help you find or download any document. What do you need help with?</div>
-            </div>
-            <div class="chat-bubble user-bubble" id="user-q" style="display:none">
-              <div class="chat-msg">How do I download the AIS from the IT portal?</div>
-            </div>
-            <div class="chat-bubble" id="ai-reply" style="display:none">
-              <div class="chat-avatar">AI</div>
-              <div class="chat-msg">Go to <strong>incometax.gov.in</strong> → Login with PAN → Click the <em>AIS</em> tab → Download PDF. I can share the direct link if you need! 😊</div>
-            </div>
-            <div class="chat-input-row">
-              <input class="chat-input" id="chat-input" type="text" placeholder="Ask me anything about your documents…" readonly>
-              <button class="chat-send">➤</button>
-            </div>
+          <!-- AI chat (mobile) -->
+          <div class="chat-panel" style="margin-top:12px;">
+            <div class="chat-head">💬 AI Assistant <span class="ai-badge">LIVE</span></div>
+            <div class="chat-bbl"><div class="chat-av">AI</div><div class="chat-msg" id="m-ai-msg">Hi! Need help with any document? Just ask me.</div></div>
+            <div class="chat-bbl user-bbl" id="m-user-q" style="display:none"><div class="chat-msg">How do I download the AIS?</div></div>
+            <div class="chat-bbl" id="m-ai-reply" style="display:none"><div class="chat-av">AI</div><div class="chat-msg">Go to <strong>incometax.gov.in</strong> → Login → AIS tab → Download. 😊</div></div>
+            <div class="chat-row"><input class="chat-in" id="m-chat-in" placeholder="Ask anything…" readonly><button class="chat-snd">➤</button></div>
           </div>
 
-          <!-- PARTIAL SAVE BANNER -->
-          <div id="partial-banner" style="margin-top:14px; padding:12px 14px; background:#f0f7ff; border:1.5px dashed #93c5fd; border-radius:10px; display:none;">
-            <div style="font-size:12px; font-weight:700; color:#1a3664; margin-bottom:3px;">✅ Progress saved!</div>
-            <div style="font-size:11.5px; color:#374151;">Come back anytime using the same link — your uploaded files and selections will be waiting.</div>
+          <div id="m-save-banner" class="save-banner">
+            <div class="sb-title">✅ Progress saved!</div>
+            <div class="sb-desc">Come back anytime — your files will be waiting.</div>
           </div>
-
-          <button class="btn btn-primary" id="btn-submit" style="margin-top:14px">Submit All Documents →</button>
-          <button class="btn" id="btn-save-later" style="margin-top:8px; background:#f3f6fb; color:#1a3664; border:1.5px solid #c7d6f0; font-size:13px;">💾 Save &amp; Continue Later</button>
+          <button class="btn btn-p">Submit All Documents →</button>
+          <button class="btn btn-s" id="m-save-btn">💾 Save & Continue Later</button>
         </div>
 
-        <!-- SCREEN 5: OFFLINE PATH -->
-        <div class="screen" id="screen-5">
-          <div class="screen-title">Offline / WhatsApp Path</div>
-          <div class="screen-sub">Select your income sources to get a tailored document list you can download and send to us.</div>
-
-          <div class="income-grid" style="gap:6px">
-            <div class="income-item checked"><input type="checkbox" checked> 💼 Salaried employee</div>
-            <div class="income-item"><input type="checkbox"> 📈 Sold shares / mutual funds / property</div>
-            <div class="income-item"><input type="checkbox"> 🏠 Rental income</div>
+        <!-- M-SCREEN 5: SUCCESS -->
+        <div class="m-screen" id="m-s5">
+          <div class="succ-icon">✅</div>
+          <div class="succ-title">Documents Submitted!</div>
+          <div class="succ-msg">Thank you, <strong>Ramesh</strong>! Securely saved.<br>We'll contact you within <strong>2 working days</strong>.</div>
+          <div class="succ-chips">
+            <div class="chip chip-wa">💬 WhatsApp</div>
+            <div class="chip chip-ph">📞 Call</div>
+            <div class="chip chip-em">✉ Email</div>
           </div>
-
-          <div class="offline-panel">
-            <div class="op-title">📄 Your requirement list is ready</div>
-            <div class="op-desc">Download the PDF and send your documents to us via WhatsApp or Email. Our team will get in touch within 2 working days.</div>
-            <div class="offline-actions">
-              <button class="btn-pdf">⬇ Download PDF</button>
-              <button class="btn-wa">💬 WhatsApp Us</button>
-            </div>
-          </div>
-
-          <div style="margin-top:18px; padding:14px; background:#f0f4fb; border-radius:10px; border:1.5px dashed #1a3664;">
-            <div style="font-size:12px; font-weight:700; color:#1a3664; margin-bottom:4px;">💡 Tip: Online upload is faster &amp; more secure</div>
-            <div style="font-size:11.5px; color:#374151; line-height:1.5;">Your documents go directly to our secure system — no back-and-forth, no risk of files getting lost in WhatsApp.</div>
-          </div>
+          <div class="succ-note">+91 74990 79092 · team@carpmassociates.com</div>
         </div>
 
-        <!-- SCREEN 6: SUCCESS -->
-        <div class="screen" id="screen-6">
-          <div class="success-icon">✅</div>
-          <div class="success-title">Documents Submitted!</div>
-          <div class="success-msg">
-            Thank you, <strong>Ramesh</strong>! Your documents are securely saved on our system.<br>
-            Our team will contact you within <strong>2 working days</strong>.
-          </div>
-          <div class="contact-row">
-            <div class="contact-chip chip-wa">💬 WhatsApp</div>
-            <div class="contact-chip chip-ph">📞 Call</div>
-            <div class="contact-chip chip-em">✉ Email</div>
-          </div>
-          <div class="contact-note">+91 74990 79092 · team@carpmassociates.com</div>
-        </div>
+      </div><!-- /m-screen-wrap -->
 
-      </div><!-- /screen-wrap -->
-
-      <!-- PROGRESS BAR -->
-      <div class="progress-bar-wrap">
-        <div class="progress-label" id="step-label">Step 1 of 5</div>
-        <div class="progress-track">
-          <div class="progress-fill" id="progress-fill" style="width:20%"></div>
-        </div>
+      <!-- Phone progress -->
+      <div class="m-progress">
+        <div class="m-progress-label" id="m-step-label">Choose path</div>
+        <div class="m-progress-track"><div class="m-progress-fill" id="m-fill" style="width:10%"></div></div>
       </div>
 
-    </div><!-- /app-frame -->
+    </div><!-- /phone-screen -->
+    <div class="phone-home-bar"></div>
+  </div><!-- /phone-shell -->
 
-  </div><!-- /demo-phone -->
-
-  <!-- ── RIGHT: NARRATION + CONTROLS (sidebar on desktop) ── -->
-  <div class="demo-controls-panel">
-
-    <!-- Sidebar intro (desktop only) -->
-    <div class="sidebar-intro">
-      <div class="sidebar-title">📋 How It Works</div>
-      <div class="sidebar-sub">
-        A guided walkthrough of the ITR document submission process on
-        <strong>carpmassociates.com/itr-fy-2025-26</strong>.
-        Press Play for audio narration, or use Next/Prev to browse manually.
-      </div>
+  <!-- Mobile controls -->
+  <div class="m-controls">
+    <div class="m-audio">
+      <span style="font-size:16px;" id="m-audio-icon">🔊</span>
+      <div class="m-audio-caption" id="m-caption">Press ▶ Play for guided audio tour.</div>
+      <button class="m-play-btn" id="m-play-btn" onclick="mToggle()">▶ Play</button>
     </div>
-
-    <!-- AUDIO CAPTION PANEL -->
-    <div class="audio-panel">
-      <div class="audio-icon" id="audio-icon">🔊</div>
-      <div class="audio-caption" id="audio-caption">Press Play to start the guided tour with audio narration.</div>
-      <button class="audio-toggle" id="audio-toggle" onclick="toggleAudio()">▶ Play</button>
+    <div class="m-nav">
+      <button onclick="mPrev()">← Prev</button>
+      <button class="primary" onclick="mStart()">↺ Replay</button>
+      <button onclick="mNext()">Next →</button>
     </div>
+  </div>
 
-    <!-- CONTROLS -->
-    <div class="controls">
-      <button class="ctrl-btn" onclick="prevScreen()">← Prev</button>
-      <button class="ctrl-btn primary" onclick="startDemo()">↺ Replay</button>
-      <button class="ctrl-btn" onclick="nextScreenManual()">Next →</button>
-    </div>
+</div><!-- /mobile-wrap -->
 
-    <!-- Feature highlights (desktop only) -->
-    <div class="sidebar-features">
-      <div class="feature">🔒 Files go directly to the firm's secure OneDrive</div>
-      <div class="feature">⏱ Takes about 5 minutes to complete</div>
-      <div class="feature">💾 Save progress and return later</div>
-      <div class="feature">🤖 AI assistant answers document questions live</div>
-      <div class="feature">📄 Offline PDF checklist option also available</div>
-    </div>
-
-  </div><!-- /demo-controls-panel -->
-
-</div><!-- /demo-wrap -->
 
 <script>
-// ── STATE ──
-let currentScreen = 0;
-let autoTimer = null;
-let audioEnabled = false;
-let speechUtterance = null;
-let isPlaying = false;
-let screenSequence = [0, 1, 2, 3, 4, 6]; // online path (skip offline screen 5)
-
-// ── NARRATION SCRIPTS ──
+// ── NARRATIONS ──
 const narrations = [
-  // Screen 0 — Landing
-  "Welcome to the ITR Document Submission tool by Rawlani Pawar Mulay and Associates. This tool takes about 5 minutes and helps you submit the right documents for your tax return. We strongly recommend the Online Upload option — it's secure, instant, and your files go directly to our team without any follow-up needed. There's also an offline option if you prefer WhatsApp or Email, but online is much faster.",
-
-  // Screen 1 — Client type
-  "First, tell us whether you're an existing client or a new client. Existing clients just need income documents. New clients will also need to upload a PAN card and Aadhaar copy — just a one-time step.",
-
-  // Screen 2 — Details
-  "Next, enter your name and mobile number. This is how we label your folder on our secure system. No login or password needed — just these two details.",
-
-  // Screen 3 — Income sources
-  "Now select your income sources for FY 2025-26. Tick everything that applies — salary, capital gains, rental income, business, F&O, or crypto. Your document checklist will be automatically tailored based on what you select here.",
-
-  // Screen 4 — Checklist + Upload + AI Chat
-  "Here's your personalised document checklist. Click the Upload button next to each document to attach the file. If you don't know where to find a document — like the AIS from the Income Tax portal — click Help and the AI assistant will guide you step by step. You can also type any question in the chat box. Don't worry if you don't have all documents ready right now — just upload whatever you have, click Save and Continue Later, and come back anytime using the same link. Your files and selections will be saved. Once everything is ready, click Submit.",
-
-  // Screen 6 — Success
-  "That's it! Your documents are securely submitted. Our team will review them and contact you within 2 working days. If you have any questions in the meantime, you can reach us on WhatsApp, phone, or email."
+  "Welcome to the ITR Document Submission tool by Rawlani Pawar Mulay and Associates. This takes about 5 minutes. We strongly recommend Online Upload — it's secure, instant, and your files go directly to our team. There's also an offline option via WhatsApp or Email.",
+  "First, tell us whether you're an existing client or a new client. Existing clients only need income documents. New clients will also need to upload a PAN card and Aadhaar copy — just a one-time step.",
+  "Enter your name and mobile number. This is how we label your secure folder. No login or password needed.",
+  "Select all your income sources for FY 2025-26 — salary, capital gains, rental, business, F&O, or crypto. Your document checklist is automatically tailored based on your selections.",
+  "Here's your personalised document checklist. Upload each file. If you don't know where to find a document, click Help and our AI assistant guides you step by step. Don't have everything ready? Upload what you have, click Save and Continue Later, and come back anytime with the same link.",
+  "That's it! Documents submitted securely. Our team will contact you within 2 working days. Reach us anytime on WhatsApp, phone, or email."
 ];
 
-// ── PROGRESS CONFIG ──
-const progressConfig = [
-  { pct: 10, label: 'Choose path' },
-  { pct: 30, label: 'Step 1 of 5' },
-  { pct: 45, label: 'Step 2 of 5' },
-  { pct: 60, label: 'Step 3 of 5' },
-  { pct: 80, label: 'Step 4 of 5' },
-  { pct: 100, label: 'Complete! ✅' },
+const captions = [
+  "Step 1: Choose Online Upload (recommended) or Offline/WhatsApp",
+  "Step 2: Tell us if you're an existing or new client",
+  "Step 3: Enter your name and mobile — no login needed",
+  "Step 4: Select your income sources — checklist is tailored automatically",
+  "Step 5: Upload documents. Need help? Chat with the AI. Save & Continue Later if needed!",
+  "Done! Submitted securely. We'll contact you within 2 working days. 🎉"
 ];
 
-// ── SHOW SCREEN ──
-function showScreen(seqIdx) {
-  const screens = document.querySelectorAll('.screen');
-  const n = screenSequence[seqIdx];
+const progressCfg = [
+  {pct:10,label:'Choose path'},
+  {pct:28,label:'Step 1 of 5'},
+  {pct:44,label:'Step 2 of 5'},
+  {pct:60,label:'Step 3 of 5'},
+  {pct:78,label:'Step 4 of 5'},
+  {pct:100,label:'Complete ✅'},
+];
 
-  screens.forEach((s, i) => {
-    s.classList.remove('active', 'exit-left');
-    const mySeq = screenSequence.indexOf(i);
-    if (mySeq !== -1 && mySeq < seqIdx) s.classList.add('exit-left');
+// ── DESKTOP LOGIC ──
+let dCur=0, dPlaying=false, dTimer=null, dUtter=null;
+const TOTAL=6;
+
+function dShow(n){
+  document.querySelectorAll('.d-screen').forEach((s,i)=>{
+    s.classList.remove('active','exit-left');
+    if(i<n) s.classList.add('exit-left');
   });
-
-  screens[n].classList.add('active');
-
-  // Scroll to top of screen-wrap when changing screens
-  const sw = document.getElementById('screen-wrap');
-  if (sw) sw.scrollTop = 0;
-
-  const cfg = progressConfig[seqIdx] || progressConfig[progressConfig.length - 1];
-  document.getElementById('progress-fill').style.width = cfg.pct + '%';
-  document.getElementById('step-label').textContent = cfg.label;
-
-  currentScreen = seqIdx;
+  document.getElementById('d-s'+n).classList.add('active');
+  const p=progressCfg[n];
+  document.getElementById('d-fill').style.width=p.pct+'%';
+  document.getElementById('d-step-label').textContent=p.label;
+  document.getElementById('d-caption').textContent=captions[n];
+  dCur=n;
 }
 
-// ── AUDIO ──
-function toggleAudio() {
-  if (isPlaying) {
-    pauseDemo();
-  } else {
-    startDemo();
-  }
-}
-
-// Speak text, then call onEnd after a 700ms pause (so slide doesn't snap immediately)
-function speak(text, onEnd) {
-  if (!('speechSynthesis' in window)) { if (onEnd) setTimeout(onEnd, 800); return; }
+function dSpeak(text,onEnd){
+  if(!('speechSynthesis' in window)){if(onEnd)setTimeout(onEnd,800);return;}
   window.speechSynthesis.cancel();
-  speechUtterance = new SpeechSynthesisUtterance(text);
-  speechUtterance.rate = 0.92;
-  speechUtterance.pitch = 1.0;
-  speechUtterance.lang = 'en-IN';
-  speechUtterance.onend = () => {
-    autoTimer = setTimeout(() => { if (isPlaying && onEnd) onEnd(); }, 700);
-  };
-  speechUtterance.onerror = () => {
-    if (isPlaying && onEnd) setTimeout(onEnd, 500);
-  };
-  window.speechSynthesis.speak(speechUtterance);
+  dUtter=new SpeechSynthesisUtterance(text);
+  dUtter.rate=0.92;dUtter.pitch=1.0;dUtter.lang='en-IN';
+  dUtter.onend=()=>{dTimer=setTimeout(()=>{if(dPlaying&&onEnd)onEnd();},700);};
+  dUtter.onerror=()=>{if(dPlaying&&onEnd)setTimeout(onEnd,400);};
+  window.speechSynthesis.speak(dUtter);
 }
 
-function pauseDemo() {
-  clearTimeout(autoTimer);
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
-  isPlaying = false;
-  document.getElementById('audio-toggle').textContent = '▶ Play';
-  document.getElementById('audio-icon').textContent = '🔇';
+function dAdvance(n){
+  dShow(n);
+  dRunAnim(n);
+  const isLast=n>=TOTAL-1;
+  dSpeak(narrations[n],isLast?null:()=>{if(dPlaying)dAdvance(n+1);});
+  if(isLast){setTimeout(()=>{dPlaying=false;document.getElementById('d-play-btn').textContent='↺ Replay';document.getElementById('d-audio-icon').textContent='🎉';},500);}
 }
 
-// ── AUTO-ADVANCE: driven entirely by speech onend ──
-function advanceTo(seqIdx) {
-  showScreen(seqIdx);
-  updateCaption(seqIdx);
-  runScreenAnimation(seqIdx);
+function dStart(){
+  clearTimeout(dTimer);
+  if(window.speechSynthesis)window.speechSynthesis.cancel();
+  dPlaying=true;
+  document.getElementById('d-play-btn').textContent='⏸ Pause';
+  document.getElementById('d-audio-icon').textContent='🔊';
+  dReset();dAdvance(0);
+}
+function dToggle(){dPlaying?dPause():dStart();}
+function dPause(){
+  clearTimeout(dTimer);
+  if(window.speechSynthesis)window.speechSynthesis.cancel();
+  dPlaying=false;
+  document.getElementById('d-play-btn').textContent='▶ Play';
+  document.getElementById('d-audio-icon').textContent='🔇';
+}
+function dNext(){clearTimeout(dTimer);if(window.speechSynthesis)window.speechSynthesis.cancel();dPlaying=true;if(dCur<TOTAL-1)dAdvance(dCur+1);}
+function dPrev(){clearTimeout(dTimer);if(window.speechSynthesis)window.speechSynthesis.cancel();dPlaying=true;if(dCur>0)dAdvance(dCur-1);}
 
-  const isLast = seqIdx >= screenSequence.length - 1;
+function dReset(){
+  document.getElementById('d-name').value='';
+  document.getElementById('d-mobile').value='';
+  document.getElementById('d-chat-in').value='';
+  document.getElementById('d-user-q').style.display='none';
+  document.getElementById('d-ai-reply').style.display='none';
+  document.getElementById('d-ai-msg').textContent='Hi! I can help you find or download any document. What do you need help with?';
+  document.getElementById('d-save-banner').style.display='none';
+  ['d-up1','d-up2','d-up4'].forEach(id=>{const e=document.getElementById(id);if(e){e.textContent='⬆ Upload';e.classList.remove('done');}});
+  ['d-inc-salary','d-inc-cg','d-inc-rental','d-inc-biz','d-inc-fo','d-inc-crypto'].forEach(id=>{const e=document.getElementById(id);if(e){e.classList.remove('chk');e.querySelector('input').checked=false;}});
+}
 
-  speak(narrations[seqIdx], isLast ? null : () => {
-    if (isPlaying) advanceTo(seqIdx + 1);
-  });
-
-  if (isLast) {
-    setTimeout(() => {
-      isPlaying = false;
-      document.getElementById('audio-toggle').textContent = '↺ Replay';
-      document.getElementById('audio-icon').textContent = '🎉';
-    }, 500);
+function dRunAnim(n){
+  if(n===0){
+    setTimeout(()=>{document.getElementById('d-card-online').classList.add('pulse');setTimeout(()=>document.getElementById('d-card-online').classList.remove('pulse'),5000);},1500);
+  }
+  if(n===2){
+    const name='Ramesh Sharma',mob='98765 43210';
+    let i=0;
+    const t1=setInterval(()=>{if(i<name.length)document.getElementById('d-name').value+=name[i++];else{clearInterval(t1);let j=0;const t2=setInterval(()=>{if(j<mob.length)document.getElementById('d-mobile').value+=mob[j++];else clearInterval(t2);},80);}},65);
+  }
+  if(n===3){
+    ['d-inc-salary','d-inc-cg'].forEach((id,idx)=>{setTimeout(()=>{const e=document.getElementById(id);e.classList.add('chk');e.querySelector('input').checked=true;},900+idx*1000);});
+  }
+  if(n===4){
+    setTimeout(()=>{const e=document.getElementById('d-up1');e.textContent='✅ Done';e.classList.add('done');},1000);
+    setTimeout(()=>{const e=document.getElementById('d-up2');e.textContent='✅ Done';e.classList.add('done');},2200);
+    setTimeout(()=>{const ci=document.getElementById('d-chat-in');const q='How do I download the AIS?';let k=0;const t=setInterval(()=>{if(k<q.length)ci.value+=q[k++];else clearInterval(t);},65);},3400);
+    setTimeout(()=>{document.getElementById('d-user-q').style.display='flex';document.getElementById('d-chat-in').value='';},5000);
+    setTimeout(()=>{document.getElementById('d-ai-reply').style.display='flex';},6100);
+    setTimeout(()=>{const b=document.getElementById('d-save-btn');b.style.background='var(--navy)';b.style.color='#fff';},7500);
+    setTimeout(()=>{const b=document.getElementById('d-save-btn');b.style.background='';b.style.color='';document.getElementById('d-save-banner').style.display='block';},8800);
   }
 }
 
-function updateCaption(seqIdx) {
-  const captions = [
-    "Visit carpmassociates.com/itr-fy-2025-26 — choose Online Upload (recommended) or Offline/WhatsApp",
-    "Tell us if you're an existing client or filing with us for the first time",
-    "Enter your name and mobile number — no login or password needed",
-    "Select all your income sources — your document list is tailored automatically",
-    "Upload documents — partial upload is fine! Save & Continue Later to come back anytime. AI chat available for help.",
-    "Done! Documents submitted securely. We'll contact you within 2 working days."
-  ];
-  document.getElementById('audio-caption').textContent = captions[seqIdx] || '';
-}
+// ── MOBILE LOGIC ──
+let mCur=0,mPlaying=false,mTimer=null,mUtter=null;
 
-// ── PER-SCREEN ANIMATIONS ──
-function runScreenAnimation(seqIdx) {
-  const n = screenSequence[seqIdx];
-  if (n === 0) animateScreen0();
-  if (n === 1) animateScreen1();
-  if (n === 2) animateScreen2();
-  if (n === 3) animateScreen3();
-  if (n === 4) animateScreen4();
-}
-
-function animateScreen0() {
-  setTimeout(() => {
-    const card = document.getElementById('card-online');
-    card.classList.add('pulse');
-    setTimeout(() => card.classList.remove('pulse'), 5000);
-  }, 1500);
-}
-
-function animateScreen1() {
-  setTimeout(() => {
-    document.getElementById('card-existing').classList.add('selected');
-  }, 500);
-}
-
-function animateScreen2() {
-  const nameField = document.getElementById('name-input');
-  const mobileField = document.getElementById('mobile-input');
-  nameField.value = ''; mobileField.value = '';
-  const name = "Ramesh Sharma", mobile = "98765 43210";
-  let i = 0;
-  const t1 = setInterval(() => {
-    if (i < name.length) nameField.value += name[i++];
-    else {
-      clearInterval(t1);
-      let j = 0;
-      const t2 = setInterval(() => {
-        if (j < mobile.length) mobileField.value += mobile[j++];
-        else clearInterval(t2);
-      }, 80);
-    }
-  }, 65);
-}
-
-function animateScreen3() {
-  const checks = ['inc-salary', 'inc-cg'];
-  checks.forEach((id, idx) => {
-    setTimeout(() => {
-      const el = document.getElementById(id);
-      el.classList.add('checked');
-      el.querySelector('input').checked = true;
-    }, 900 + idx * 1000);
+function mShow(n){
+  document.querySelectorAll('.m-screen').forEach((s,i)=>{
+    s.classList.remove('active','exit-left');
+    if(i<n)s.classList.add('exit-left');
   });
+  document.getElementById('m-s'+n).classList.add('active');
+  const p=progressCfg[n];
+  document.getElementById('m-fill').style.width=p.pct+'%';
+  document.getElementById('m-step-label').textContent=p.label;
+  document.getElementById('m-caption').textContent=captions[n];
+  mCur=n;
+  // scroll screen back to top
+  const wrap=document.getElementById('m-screen-wrap');
+  if(wrap)wrap.scrollTop=0;
 }
 
-function animateScreen4() {
-  setTimeout(() => markDone('up1'), 1000);
-  setTimeout(() => markDone('up2'), 2200);
-  setTimeout(() => {
-    const ci = document.getElementById('chat-input');
-    const q = "How do I download the AIS?";
-    let k = 0;
-    const t = setInterval(() => {
-      if (k < q.length) ci.value += q[k++]; else clearInterval(t);
-    }, 65);
-  }, 3400);
-  setTimeout(() => {
-    document.getElementById('user-q').style.display = 'flex';
-    document.getElementById('chat-input').value = '';
-  }, 5000);
-  setTimeout(() => {
-    document.getElementById('ai-reply').style.display = 'flex';
-    // Scroll down inside screen-wrap to show the chat reply
-    const sw = document.getElementById('screen-wrap');
-    if (sw) sw.scrollTo({ top: sw.scrollHeight, behavior: 'smooth' });
-  }, 6100);
-  setTimeout(() => {
-    const btn = document.getElementById('btn-save-later');
-    btn.style.background = '#1a3664';
-    btn.style.color = '#fff';
-    btn.style.borderColor = '#1a3664';
-  }, 7500);
-  setTimeout(() => {
-    const btn = document.getElementById('btn-save-later');
-    btn.style.background = '#f3f6fb';
-    btn.style.color = '#1a3664';
-    btn.style.borderColor = '#c7d6f0';
-    document.getElementById('partial-banner').style.display = 'block';
-    const sw = document.getElementById('screen-wrap');
-    if (sw) sw.scrollTo({ top: sw.scrollHeight, behavior: 'smooth' });
-  }, 8600);
+function mSpeak(text,onEnd){
+  if(!('speechSynthesis' in window)){if(onEnd)setTimeout(onEnd,800);return;}
+  window.speechSynthesis.cancel();
+  mUtter=new SpeechSynthesisUtterance(text);
+  mUtter.rate=0.92;mUtter.pitch=1.0;mUtter.lang='en-IN';
+  mUtter.onend=()=>{mTimer=setTimeout(()=>{if(mPlaying&&onEnd)onEnd();},700);};
+  mUtter.onerror=()=>{if(mPlaying&&onEnd)setTimeout(onEnd,400);};
+  window.speechSynthesis.speak(mUtter);
 }
 
-function markDone(id) {
-  const el = document.getElementById(id);
-  el.textContent = '✅ Done';
-  el.classList.add('done');
+function mAdvance(n){
+  mShow(n);
+  mRunAnim(n);
+  const isLast=n>=TOTAL-1;
+  mSpeak(narrations[n],isLast?null:()=>{if(mPlaying)mAdvance(n+1);});
+  if(isLast){setTimeout(()=>{mPlaying=false;document.getElementById('m-play-btn').textContent='↺ Replay';document.getElementById('m-audio-icon').textContent='🎉';},500);}
 }
 
-// ── START DEMO ──
-function startDemo() {
-  clearTimeout(autoTimer);
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
-  audioEnabled = true;
-  isPlaying = true;
+function mStart(){
+  clearTimeout(mTimer);
+  if(window.speechSynthesis)window.speechSynthesis.cancel();
+  mPlaying=true;
+  document.getElementById('m-play-btn').textContent='⏸ Pause';
+  document.getElementById('m-audio-icon').textContent='🔊';
+  mReset();mAdvance(0);
+}
+function mToggle(){mPlaying?mPause():mStart();}
+function mPause(){
+  clearTimeout(mTimer);
+  if(window.speechSynthesis)window.speechSynthesis.cancel();
+  mPlaying=false;
+  document.getElementById('m-play-btn').textContent='▶ Play';
+  document.getElementById('m-audio-icon').textContent='🔇';
+}
+function mNext(){clearTimeout(mTimer);if(window.speechSynthesis)window.speechSynthesis.cancel();mPlaying=true;if(mCur<TOTAL-1)mAdvance(mCur+1);}
+function mPrev(){clearTimeout(mTimer);if(window.speechSynthesis)window.speechSynthesis.cancel();mPlaying=true;if(mCur>0)mAdvance(mCur-1);}
 
-  // Reset all state
-  document.getElementById('name-input').value = '';
-  document.getElementById('mobile-input').value = '';
-  document.getElementById('chat-input').value = '';
-  document.getElementById('user-q').style.display = 'none';
-  document.getElementById('ai-reply').style.display = 'none';
-  document.getElementById('ai-msg1').textContent = 'Hi! I can help you find or download any document. What do you need help with?';
-  ['inc-salary','inc-cg','inc-rental','inc-biz','inc-fo','inc-crypto'].forEach(id => {
-    const el = document.getElementById(id);
-    el.classList.remove('checked');
-    el.querySelector('input').checked = false;
-  });
-  ['up1','up2'].forEach(id => {
-    document.getElementById(id).textContent = '⬆ Upload';
-    document.getElementById(id).classList.remove('done');
-  });
-  document.getElementById('partial-banner').style.display = 'none';
-  const saveBtn = document.getElementById('btn-save-later');
-  saveBtn.style.background = '#f3f6fb';
-  saveBtn.style.color = '#1a3664';
-  saveBtn.style.borderColor = '#c7d6f0';
-
-  document.getElementById('audio-toggle').textContent = '⏸ Pause';
-  document.getElementById('audio-icon').textContent = '🔊';
-
-  advanceTo(0);
+function mReset(){
+  document.getElementById('m-name').value='';
+  document.getElementById('m-mobile').value='';
+  document.getElementById('m-chat-in').value='';
+  document.getElementById('m-user-q').style.display='none';
+  document.getElementById('m-ai-reply').style.display='none';
+  document.getElementById('m-save-banner').style.display='none';
+  ['m-inc-salary','m-inc-cg','m-inc-rental','m-inc-biz','m-inc-fo','m-inc-crypto'].forEach(id=>{const e=document.getElementById(id);if(e){e.classList.remove('chk');e.querySelector('input').checked=false;}});
+  ['m-up1','m-up2'].forEach(id=>{const e=document.getElementById(id);if(e){e.textContent='⬆ Upload';e.classList.remove('done');}});
 }
 
-// ── MANUAL NAV ──
-function nextScreenManual() {
-  clearTimeout(autoTimer);
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
-  isPlaying = true;
-  if (currentScreen < screenSequence.length - 1) {
-    advanceTo(currentScreen + 1);
+function mRunAnim(n){
+  if(n===2){
+    const name='Ramesh Sharma',mob='98765 43210';
+    let i=0;
+    const t1=setInterval(()=>{if(i<name.length)document.getElementById('m-name').value+=name[i++];else{clearInterval(t1);let j=0;const t2=setInterval(()=>{if(j<mob.length)document.getElementById('m-mobile').value+=mob[j++];else clearInterval(t2);},80);}},65);
+  }
+  if(n===3){
+    ['m-inc-salary','m-inc-cg'].forEach((id,idx)=>{setTimeout(()=>{const e=document.getElementById(id);e.classList.add('chk');e.querySelector('input').checked=true;},900+idx*1000);});
+  }
+  if(n===4){
+    setTimeout(()=>{const e=document.getElementById('m-up1');e.textContent='✅ Done';e.classList.add('done');},1200);
+    setTimeout(()=>{const e=document.getElementById('m-up2');e.textContent='✅ Done';e.classList.add('done');},2400);
+    setTimeout(()=>{const ci=document.getElementById('m-chat-in');const q='How do I download the AIS?';let k=0;const t=setInterval(()=>{if(k<q.length)ci.value+=q[k++];else clearInterval(t);},65);},3500);
+    setTimeout(()=>{document.getElementById('m-user-q').style.display='flex';document.getElementById('m-chat-in').value='';},5100);
+    setTimeout(()=>{document.getElementById('m-ai-reply').style.display='flex';},6200);
+    setTimeout(()=>{const b=document.getElementById('m-save-btn');b.style.background='var(--navy)';b.style.color='#fff';},7600);
+    setTimeout(()=>{const b=document.getElementById('m-save-btn');b.style.background='';b.style.color='';document.getElementById('m-save-banner').style.display='block';},8900);
   }
 }
 
-function prevScreen() {
-  clearTimeout(autoTimer);
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
-  isPlaying = true;
-  if (currentScreen > 0) {
-    advanceTo(currentScreen - 1);
-  }
-}
-
-// ── INIT (no autoplay — wait for user) ──
-window.addEventListener('load', () => {
-  showScreen(0);
-  updateCaption(0);
-  animateScreen0();
-  document.getElementById('audio-caption').textContent =
-    "Press ▶ Play to start the guided audio tour — or use Next/Prev to browse manually.";
+// ── INIT: show correct layout based on viewport ──
+window.addEventListener('load',()=>{
+  dShow(0);
+  mShow(0);
 });
 </script>
 </body>
