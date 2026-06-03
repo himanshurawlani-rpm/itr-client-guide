@@ -48,27 +48,27 @@ body {
    Left : phone simulation  (440px fixed)
    Right: narration sidebar (flexible)
    ───────────────────────────────────────────────────────────────── */
-@media (min-width: 860px) {
+@media (min-width: 520px) {
   body {
     justify-content: center;
-    padding: 14px 20px;
+    padding: 14px 16px;
   }
   .demo-wrap {
     flex-direction: row;
     max-width: 980px;
     align-items: flex-start;
-    gap: 24px;
+    gap: 20px;
     justify-content: center;
   }
   .demo-phone {
-    flex: 0 0 420px;
-    width: 420px;
+    flex: 0 0 360px;
+    width: 360px;
   }
   .demo-controls-panel {
     flex: 1;
-    min-width: 200px;
-    max-width: 340px;
-    gap: 12px;
+    min-width: 180px;
+    max-width: 300px;
+    gap: 10px;
     padding-top: 4px;
   }
 
@@ -89,6 +89,7 @@ body {
   /* Audio panel becomes standalone card on desktop */
   .audio-panel {
     border-radius: 12px !important;
+    padding: 10px 14px !important;
   }
 
   /* Controls lose top margin — gap on parent handles spacing */
@@ -104,15 +105,15 @@ body {
     order: -1;
   }
   .sidebar-title {
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 800;
     color: #1a3664;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
   }
   .sidebar-sub {
-    font-size: 12.5px;
+    font-size: 11.5px;
     color: #6b7280;
-    line-height: 1.55;
+    line-height: 1.5;
   }
 
   /* Feature bullets card */
@@ -215,9 +216,9 @@ body {
   overflow: hidden;
 }
 /* Mobile: grows with content, max-height prevents runaway long screens */
-@media (max-width: 859px) {
+@media (max-width: 519px) {
   .screen-wrap {
-    max-height: 560px;
+    max-height: 520px;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #d1d5db transparent;
