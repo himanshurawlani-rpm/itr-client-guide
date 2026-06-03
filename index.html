@@ -72,10 +72,11 @@ body {
     padding-top: 4px;
   }
 
-  /* Taller screen viewport on desktop — less internal scroll */
+  /* Desktop: grows with content, scrolls if taller than max */
   .screen-wrap {
-    height: 460px !important;
+    height: auto !important;
     min-height: unset !important;
+    max-height: 540px;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: thin;
@@ -210,13 +211,13 @@ body {
 /* ── SCREEN CONTAINER ── */
 .screen-wrap {
   position: relative;
-  min-height: 420px;
+  min-height: 0;
   overflow: hidden;
 }
-/* Mobile: limit height with internal scroll so page doesn't get too tall */
+/* Mobile: grows with content, max-height prevents runaway long screens */
 @media (max-width: 859px) {
   .screen-wrap {
-    max-height: 520px;
+    max-height: 560px;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #d1d5db transparent;
